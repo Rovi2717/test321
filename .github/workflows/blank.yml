@@ -2,23 +2,21 @@ name: Deploy to EC2
 
 on:
   push:
-    branches: [ main ]
+    branches: [ master ]          # or your target branch
 
 jobs:
-  deploy:
+  Deploy:
     runs-on: ubuntu-latest
-    
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
-
-      - name: Copy index.html to EC2
+      - uses: actions/checkout@v2
+      - name: Deploy over SSH
         env:
-          HOST: ${{ secrets.EC2_HOST }}
-          USER: ${{ secrets.EC2_USER }}
-          KEY: ${{ secrets.EC2_SSH_KEY }}
+          PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
+          HOSTNAME: ${{ secrets.EC2_HOST }}
+          USER_NAME: ${{ secrets.EC2_USER }}
         run: |
-          echo "$KEY" > key.pem
-          chmod 400 key.pem
-          scp -i key.pem -o StrictHostKeyChecking=no index.html $USER@$HOST:/tmp/
-          ssh -i key.pem $USER@$HOST "sudo mv /tmp/index.html /var/www/html/"
+          cat << 'EOF' > private_key
+          ${{ secrets.SSH_PRIVATE_KEY }}
+          EOF
+          chmod 600 private_key
+          ssh -o StrictHostKeyChecking=no -i private_key ${USER_NAME}@${HOSTNAME} "echo "webserver5" > /var/www/html/index.html"

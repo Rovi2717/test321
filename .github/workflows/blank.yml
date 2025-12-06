@@ -11,12 +11,12 @@ jobs:
       - uses: actions/checkout@v2
       - name: Deploy over SSH
         env:
-          PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
+          PRIVATE_KEY: ${{ secrets.EC2_SSH_KEY }}
           HOSTNAME: ${{ secrets.EC2_HOST }}
           USER_NAME: ${{ secrets.EC2_USER }}
         run: |
           cat << 'EOF' > private_key
-          ${{ secrets.SSH_PRIVATE_KEY }}
+          ${{ secrets.EC2_SSH_KEY }}
           EOF
           chmod 600 private_key
           ssh -o StrictHostKeyChecking=no -i private_key ${USER_NAME}@${HOSTNAME} "echo "webserver5" > /var/www/html/index.html"

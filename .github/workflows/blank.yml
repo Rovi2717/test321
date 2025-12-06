@@ -2,7 +2,7 @@ name: Deploy index.html to EC2
 
 on:
   push:
-    branches: [ main ]
+    branches: [ master ]
     paths: ['index.html']  # Only run when index.html changes [web:1]
 
 jobs:

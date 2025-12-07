@@ -1,5 +1,4 @@
-name: Matrix Demo
-
+name: Node.js Tests
 on: [push]
 
 jobs:
@@ -7,7 +6,12 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        version: [1, 2, 3]    # 3 parallel jobs
-    
+        node: [16, 18, 20]     # Real Node versions
     steps:
-      - run: echo "Testing version ${{ matrix.version }}"
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.node }}
+      - run: npm install
+      - run: npm test
+

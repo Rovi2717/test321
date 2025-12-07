@@ -1,23 +1,13 @@
-name: Full Matrix Example - Deploy to 3 Cities
-on: [push]
+name: Simple Input Demo
+on:
+  workflow_dispatch:
+    inputs:
+      name:
+        description: 'Your name'
+        default: 'DevOps Rohit'
 
 jobs:
-  deploy:
+  hello:
     runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        city: [mumbai, delhi, bangalore]  # 3 cities
     steps:
-      - uses: actions/checkout@v4
-      
-      - name: Deploy to ${{ matrix.city }}
-        env:
-          CITY_IP: |
-            ${{ 
-              matrix.city == 'mumbai' && '13.232.1.1' ||
-              matrix.city == 'delhi' && '52.66.2.2' ||
-              '3.110.3.3' 
-            }}
-        run: |
-          echo "Deploying index.html to ${CITY_IP}"
-          echo "✅ ${{ matrix.city }} server updated!"
+      - run: echo "Hello ${{ inputs.name }}!"

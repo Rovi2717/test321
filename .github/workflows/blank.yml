@@ -1,4 +1,4 @@
-name: Node.js Tests
+name: Test Python Versions
 on: [push]
 
 jobs:
@@ -6,12 +6,9 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        node: [16, 18, 20]     # Real Node versions
+        python: [3.8, 3.9, 3.10]  # 3 Python versions
+    
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
-        with:
-          node-version: ${{ matrix.node }}
-      - run: npm install
-      - run: npm test
+      - run: python${{ matrix.python }} --version
+
 

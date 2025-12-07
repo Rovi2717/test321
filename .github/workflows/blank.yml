@@ -1,21 +1,13 @@
-name: Deploy to EC2
-on:
-  push:
-    branches: [ master ]          # or your target branch
+name: Matrix Demo
+
+on: [push]
+
 jobs:
-  Deploy:
+  test:
     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        version: [1, 2, 3]    # 3 parallel jobs
+    
     steps:
-      - uses: actions/checkout@v2
-      - name: Deploy index.html over SSH
-        env:
-          PRIVATE_KEY: ${{ secrets.EC2_SSH_KEY }}
-          HOSTNAME: ${{ secrets.EC2_HOST }}
-          USER_NAME: ${{ secrets.EC2_USER }}
-        run: |
-          cat << 'EOF' > private_key
-          ${{ secrets.EC2_SSH_KEY }}
-          EOF
-          chmod 600 private_key
-          scp -o StrictHostKeyChecking=no -i private_key index.html ${USER_NAME}@${HOSTNAME}:/tmp/
-          ssh -o StrictHostKeyChecking=no -i private_key ${USER_NAME}@${HOSTNAME} "sudo mv /tmp/index.html /var/www/html/"
+      - run: echo "Testing version ${{ matrix.version }}"

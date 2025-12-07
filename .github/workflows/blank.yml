@@ -1,14 +1,11 @@
-name: Test Python Versions
+name: Test 3 Colors
 on: [push]
 
 jobs:
-  test:
-    runs-on: ubuntu-latest
+  paint:
     strategy:
       matrix:
-        python: [3.8, 3.9, 3.10]  # 3 Python versions
-    
-    steps:
-      - run: python${{ matrix.python }} --version
+        color: [red, green, blue]  # 3 colors!
+    run: echo "Painting ${{ matrix.color }} car"
 
 

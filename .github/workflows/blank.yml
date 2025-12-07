@@ -1,20 +1,12 @@
-name: Manual Deploy with Inputs
+name: Simple Input
 on:
-  workflow_dispatch:     # Manual trigger button
+  workflow_dispatch:
     inputs:
-      environment:
-        description: 'Choose env'
-        required: true
-        default: 'staging'
-        type: choice
-        options: ['staging', 'prod']
-      version:
-        description: 'App version'
-        required: true
-        default: '1.0.0'
+      name:
+        description: 'Your name?'
 
 jobs:
-  deploy:
+  hello:
     runs-on: ubuntu-latest
     steps:
-      - run: echo "Deploying ${{ github.event.inputs.version }} to ${{ github.event.inputs.environment }}"
+      - run: echo "Hello ${{ github.event.inputs.name }}!"

@@ -1,11 +1,23 @@
-name: Test 3 Colors
+name: Full Matrix Example - Deploy to 3 Cities
 on: [push]
 
 jobs:
-  paint:
+  deploy:
+    runs-on: ubuntu-latest
     strategy:
       matrix:
-        color: [red, green, blue]  # 3 colors!
-    run: echo "Painting ${{ matrix.color }} car"
-
-
+        city: [mumbai, delhi, bangalore]  # 3 cities
+    steps:
+      - uses: actions/checkout@v4
+      
+      - name: Deploy to ${{ matrix.city }}
+        env:
+          CITY_IP: |
+            ${{ 
+              matrix.city == 'mumbai' && '13.232.1.1' ||
+              matrix.city == 'delhi' && '52.66.2.2' ||
+              '3.110.3.3' 
+            }}
+        run: |
+          echo "Deploying index.html to ${CITY_IP}"
+          echo "✅ ${{ matrix.city }} server updated!"
